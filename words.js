@@ -1,4 +1,4 @@
-export default {
+const words = {
   about: true,
   other: true,
   which: true,
@@ -2570,3 +2570,22 @@ export default {
   darth: true,
   ching: true
 };
+
+export const getTodaysWord = () => {
+  var wordValues = Object.keys(words);
+  //I'm using Left shift (<<) here because its cool
+  const randomWord = wordValues[(wordValues.length * Math.random()) << 0];
+  console.log({ randomWord });
+  return randomWord;
+};
+export const validateWord = (word) => {
+  // check if the entered entry is an actual word
+  const isValid = words.hasOwnProperty(word);
+  console.log({ isValid });
+  return isValid;
+};
+
+export const todaysWord = getTodaysWord();
+export const todaysWordSplit = todaysWord
+  .split("")
+  .reduce((a, c, i) => [...a, c], []);

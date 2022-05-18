@@ -1,43 +1,15 @@
 <script>
-  import Button from "./Button.svelte";
-  import words from "./words";
+  import { rows } from "./stores.js";
+  import { todaysWordSplit, validateWord, todaysWord } from "./words";
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
-  let rows = [
-    generateRow(),
-    generateRow(),
-    generateRow(),
-    generateRow(),
-    generateRow()
-  ];
-  const todaysWord = getTodaysWord();
-  const todaysWordSplit = todaysWord.split("").reduce((a, c, i) => [...a, c], []);
 
-  function generateRow() {
-    return {
-      0: {
-        score: "EMPTY",
-        value: ""
-      },
-      1: {
-        score: "EMPTY",
-        value: ""
-      },
-      2: {
-        score: "EMPTY",
-        value: ""
-      },
-      3: {
-        score: "EMPTY",
-        value: ""
-      },
-      4: {
-        score: "EMPTY",
-        value: ""
-      }
-    };
-  }
+  let rowsValue;
+  rows.subscribe(value => {
+    rowsValue = value;
+  });
+
   function checkRowResult(row) {
     const enteredWordCharacters = Object.values(row)
       .map(row => row.value)
@@ -72,21 +44,6 @@
       }
       row[i].value = enteredWordCharacters[i];
     }
-  }
-  function validateWord(word, field, value) {
-    // check if the entered entry is an actual word
-    const isValid = words.hasOwnProperty(word);
-    console.log({ isValid });
-    return isValid;
-  }
-
-  function getTodaysWord() {
-    var wordValues = Object.keys(words);
-    //I'm using Left shift (<<) here because its cool
-    const randomWord = wordValues[(wordValues.length * Math.random()) << 0];
-    console.log({ randomWord });
-    // test commiting from codesandbox
-    return randomWord;
   }
 
   function getCellClass(score) {
@@ -132,7 +89,7 @@
 <svelte:window on:keydown={(event)=>{
   	const keyCode = event.keyCode;
   	const key = event.key;
-    const tempRows = [...rows]
+    const tempRows = [...rowsValue]
     
     let validCHarCode = (keyCode > 64 && keyCode < 91)
     const isBackSpace = keyCode == 8
@@ -140,14 +97,18 @@
 
     if(validCHarCode && !isBackSpace && activeCharIndex < 5 && activeRowIndex < 5 ){
        // next cell 
-       tempRows[activeRowIndex][activeCharIndex].value=key
+       rows.update(_rows => {
+        	[..._rows][activeRowIndex][activeCharIndex].value=key
+        	return _rows
+	     });
        if(activeCharIndex < 4 )activeCharIndex =activeCharIndex + 1 
-       
-
     }
     if(isBackSpace && !validCHarCode && activeCharIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       tempRows[activeRowIndex][activeCharIndex].value=""
+       rows.update(_rows => {
+        	[..._rows][activeRowIndex][activeCharIndex].value=""
+        	return _rows
+	     });
        activeCharIndex =activeCharIndex === 0 ? 0: activeCharIndex - 1 
     }
      if ( isEnter && activeRowIndex < 5 && activeCharIndex > 3 && tempRows[activeRowIndex][4].value !== ""){
@@ -157,24 +118,27 @@
       .map(row => row.value)
       .join("");
 
-       if(validateWord(words))
+       if(validateWord(words)){
+	
        checkRowResult(tempRows[activeRowIndex])
-       console.log(tempRows.length)
+	       $rows[activeRowIndex] = tempRows[activeRowIndex]
+
        //reset cell index by setting state variable activeCharIndex
        activeCharIndex = 0 
-
+        
        // next line 
        // by setting state variable activeCharIndex
        activeRowIndex =activeRowIndex + 1 
+	}
+
+     
     }
 
-    // set the rows state
-    rows = tempRows
  
 }}/>
 
 <main>
-  {#each rows as row}
+  {#each rowsValue as row}
   <div class="row"  >
   {#each Object.values(row) as cell}
 	         <div class={getCellClass(cell.score)}>{cell.value}</div>
