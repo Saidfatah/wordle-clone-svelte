@@ -85,6 +85,7 @@
     //I'm using Left shift (<<) here because its cool
     const randomWord = wordValues[(wordValues.length * Math.random()) << 0];
     console.log({ randomWord });
+    // test commiting from codesandbox
     return randomWord;
   }
 
