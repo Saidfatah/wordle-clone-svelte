@@ -10,7 +10,6 @@
   let _rows;
 
   const unsubscribeRows = rows.subscribe(value => {
-    console.log(value);
     _rows = value;
   });
 
@@ -106,10 +105,10 @@
 }}/>
 
 <main>
-  {#each _rows as row,i}
+  {#each _rows as row,rowIndex}
   <div class="row"  >
-  {#each Object.values(row) as cell}
-     <svelte:component this={Cell} {...{cell,isCurrentRow:i == activeRowIndex}}/>
+  {#each Object.values(row) as cell,cellIndex}
+     <svelte:component this={Cell} {...{cell,cellIndex,isCurrentRow:rowIndex == activeRowIndex}}/>
 	{/each}
   </div>
    
