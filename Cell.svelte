@@ -56,54 +56,56 @@
 
 
 <style>
-						.box {
-						  width: 50px;
-						  height: 50px;
-						  margin: 2px;
-						  display: flex;
+								.box {
+								  width: 50px;
+								  height: 50px;
+								  margin: 2px;
+								  display: flex;
 
-						  justify-content: center;
-						  align-items: center;
-						}
-						.empty {
-						  background: grey;
-						}
-						.wrong {
-						  background: grey;
-						}
-						.wrong-index {
-						  background: yellow;
-						}
-						.correct {
-						  background: green;
-						}
+								  justify-content: center;
+								  align-items: center;
+								  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+								    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+								}
+								.empty {
+								  border: 2px solid grey;
+								}
+								.wrong {
+								  background: grey;
+								}
+								.wrong-index {
+								  background: yellow;
+								}
+								.correct {
+								  background: green;
+								}
 
-						.animationContainer {
-						  display: inline-block;
-						}
-						@keyframes wiggle {
-						  0% {
-						    transform: rotate(0deg);
-						  }
-						  25% {
-						    transform: rotate(5deg);
-						  }
-						  50% {
-						    transform: rotate(0eg);
-						  }
-						  75% {
-						    transform: rotate(-5deg);
-						  }
-						  100% {
-						    transform: rotate(0deg);
-						  }
-						}
+								.animationContainer {
+								  display: inline-block;
+								}
+								@keyframes wiggle {
+								  0% {
+								    transform: rotate(0deg);
+								  }
+								  25% {
+								    transform: rotate(5deg);
+								  }
+								  50% {
+								    transform: rotate(0eg);
+								  }
+								  75% {
+								    transform: rotate(-5deg);
+								  }
+								  100% {
+								    transform: rotate(0deg);
+								  }
+								}
 
-						.wiggle {
-						  animation-name: wiggle;
-						  animation-play-state: running;
-						  animation-duration: 0.5s;
-						}
+								.wiggle {
+								  animation-name: wiggle;
+								  animation-play-state: running;
+								  animation-duration: 0.5s;
+								}
 </style>
 
 <div bind:this={cellRef} class="animationContainer" > 

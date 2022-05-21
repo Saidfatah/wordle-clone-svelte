@@ -8,11 +8,19 @@
   import { wordsStore, notifications } from "./stores.js";
 
   let activeRowIndex = 0;
-  let activeCharIndex = 0;
+  let activeCellIndex = 0;
 
   let _rows;
 
-  const unsubscribeRows = wordsStore.subscribeToRows(value => {
+  wordsStore.subscribeToActiveRowIndex(value => {
+    activeRowIndex = value;
+  });
+  wordsStore.subscribeToActiveCellIndex(value => {
+    console.log(value);
+    activeCellIndex = value;
+  });
+
+  wordsStore.subscribeToRows(value => {
     _rows = value;
   });
 </script>
@@ -43,17 +51,17 @@
     const isBackSpace = keyCode == 8
     const isEnter = keyCode == 13
 
-    if(validCHarCode && !isBackSpace && activeCharIndex < 5 && activeRowIndex < 5 ){
+    if(validCHarCode && !isBackSpace && activeCellIndex < 5 && activeRowIndex < 5 ){
        // next cell 
-       wordsStore.updateCell(activeRowIndex,activeCharIndex,key)
-       if(activeCharIndex < 4 )activeCharIndex =activeCharIndex + 1 
+       wordsStore.updateActiveCellValue(key)
+       wordsStore.incrementCellIndex()
     }
-    if(isBackSpace && !validCHarCode && activeCharIndex >= 0 && activeRowIndex < 5 ){
+    if(isBackSpace && !validCHarCode && activeCellIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       wordsStore.updateCell(activeRowIndex,activeCharIndex,"")
-       activeCharIndex =activeCharIndex === 0 ? 0: activeCharIndex - 1 
+       wordsStore.updateActiveCellValue("")
+       wordsStore.decrementCellIndex()
     }
-    if ( isEnter && activeRowIndex < 5 && activeCharIndex > 3 && _rows[activeRowIndex][4].value !== ""){
+    if ( isEnter && activeRowIndex < 5 && activeCellIndex > 3 && _rows[activeRowIndex][4].value !== ""){
        //check if word is correct 
        // here we are sending tempRows[activeRowIndex] as a ref 
        const word = Object.values(_rows[activeRowIndex])
@@ -63,12 +71,10 @@
        const tempRows = [..._rows]
        if(validateWord(word)){
        wordsStore.checkRowResult(activeRowIndex,tempRows[activeRowIndex])
-
-       //reset cell index by setting state variable activeCharIndex
-       activeCharIndex = 0 
+       // reset cell to 0
+       wordsStore.incrementCellIndex()
        // next line 
-       // by setting state variable activeCharIndex
-       activeRowIndex =activeRowIndex + 1 
+       wordsStore.incrementRowIndex()
        }else notifications.warning('this is not an English word', 500)
 
     }

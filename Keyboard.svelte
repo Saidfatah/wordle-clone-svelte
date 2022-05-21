@@ -1,10 +1,7 @@
 <script>
-  import { flip } from "svelte/animate";
-  import { fly } from "svelte/transition";
-  import { notifications } from "./stores.js";
+  import { wordsStore } from "./stores";
 
   const ASCIkeys = Array.from(Array(26).keys()).map(n => n + 65);
-  console.log(ASCIkeys);
 </script>
 
 
@@ -31,7 +28,7 @@
 
 <div class="keyboard">
     {#each ASCIkeys as ASCIkey }
-        <button class="keyboard-key" > 
+        <button on:click={e=>wordsStore.updateActiveCellValue(String.fromCharCode(ASCIkey))} class="keyboard-key" > 
          {String.fromCharCode(ASCIkey)}
         </button>
     {/each}

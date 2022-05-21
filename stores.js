@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 import { todaysWord, todaysWordSplit } from "./words";
 
 function generateRow() {
@@ -28,6 +28,9 @@ function generateRow() {
 
 const createWordsStore = () => {
   const wordIsValid = writable(true);
+  const activeRowIndex = writable(0);
+  const activeCellIndex = writable(0);
+
   const rows = writable([
     generateRow(),
     generateRow(),
@@ -36,30 +39,45 @@ const createWordsStore = () => {
     generateRow()
   ]);
 
-  const updateRow = (rowIndex, rowValue) => {
+  //const updateActiveRow = (rowValue) => {
+  //rows.update((state) => {
+  //  const tempRows = [...state];
+  //  tempRows[get(activeRowIndex)] = rowValue;
+  //  return tempRows;
+  //});
+  //};
+
+  const updateActiveCellValue = (cellValue) => {
     rows.update((state) => {
       const tempRows = [...state];
-      tempRows[rowIndex] = rowValue;
+      tempRows[get(activeRowIndex)][get(activeCellIndex)].value = cellValue;
       return tempRows;
     });
+    incrementCellIndex();
   };
-  const updateCell = (rowIndex, cellIndex, cellValue) => {
+  const updateActiveCellScore = (cellScore) => {
     rows.update((state) => {
       const tempRows = [...state];
-      tempRows[rowIndex][cellIndex].value = cellValue;
-      return tempRows;
-    });
-  };
-  const updateCellScore = (rowIndex, cellIndex, cellScore) => {
-    rows.update((state) => {
-      const tempRows = [...state];
-      tempRows[rowIndex][cellIndex].score = cellScore;
+      tempRows[get(activeRowIndex)][get(activeCellIndex)].score = cellScore;
       return tempRows;
     });
   };
   const updateWordIsValid = (isValid) => {
     wordIsValid.set(isValid);
   };
+
+  // here v stands for the state of the writable
+  // in these two cases activeRowIndex's state
+  // and activeCellIndex's state type are Numbers
+  const incrementRowIndex = () =>
+    activeRowIndex.update((v) => (v < 4 ? v + 1 : v));
+
+  const resetCellIndex = () => activeCellIndex.set(0);
+  const incrementCellIndex = () =>
+    activeCellIndex.update((v) => (v < 4 ? v + 1 : v));
+
+  const decrementCellIndex = () =>
+    activeCellIndex.update((v) => (v === 0 ? 0 : v - 1));
 
   const checkRowResult = (rowIndex, targetRow) => {
     const enteredWordCharacters = Object.values(targetRow)
@@ -68,7 +86,7 @@ const createWordsStore = () => {
 
     for (let i = 0; i < 5; i++) {
       if (enteredWordCharacters[i] === todaysWordSplit[i]) {
-        updateCellScore(rowIndex, i, "CORRECT");
+        updateActiveCellScore(rowIndex, i, "CORRECT");
       } else if (todaysWord.indexOf(enteredWordCharacters[i]) > -1) {
         const countAppearncesInTry =
           enteredWordCharacters.split(enteredWordCharacters[i]).length - 1;
@@ -84,25 +102,34 @@ const createWordsStore = () => {
           //handle multiple appearnces in case wehere user typed correct
           // chars but typed same char in wrong index
 
-          updateCellScore(rowIndex, i, "WRONG_INDEX");
-        } else updateCellScore(rowIndex, i, "WRONG");
+          updateActiveCellScore(rowIndex, i, "WRONG_INDEX");
+        } else updateActiveCellScore(rowIndex, i, "WRONG");
       } else {
-        updateCellScore(rowIndex, i, "WRONG");
+        updateActiveCellScore(rowIndex, i, "WRONG");
       }
-      updateCell(rowIndex, i, enteredWordCharacters[i]);
+      updateActiveCellValue(rowIndex, i, enteredWordCharacters[i]);
     }
   };
 
   const subscribeToRows = rows.subscribe;
+  const subscribeToActiveRowIndex = activeRowIndex.subscribe;
+  const subscribeToActiveCellIndex = activeCellIndex.subscribe;
   const subscribeToWordIsValid = wordIsValid.subscribe;
 
   return {
-    updateCell,
-    updateRow,
     subscribeToRows,
     subscribeToWordIsValid,
     updateWordIsValid,
-    checkRowResult
+    checkRowResult,
+
+    subscribeToActiveRowIndex,
+    incrementRowIndex,
+    subscribeToActiveCellIndex,
+    decrementCellIndex,
+    incrementCellIndex,
+    resetCellIndex,
+
+    updateActiveCellValue
   };
 };
 
