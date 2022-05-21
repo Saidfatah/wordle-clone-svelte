@@ -16,35 +16,34 @@
       cellRef.classList.add("wiggle");
       setTimeout(() => {
         cellRef.classList.remove("wiggle");
+        // reset row state
+
         $wordIsValid = true;
       }, 1000);
     }
   }
 
-  function getCellText(isWrong) {
-    if (isWrong) {
-      switch (cellIndex) {
-        case 0:
-          return "W";
-          break;
-        case 1:
-          return "R";
-          break;
-        case 2:
-          return "O";
-          break;
-        case 3:
-          return "N";
-          break;
-        case 4:
-          return "G";
-          break;
-        default:
-          return "";
-          break;
-      }
+  function getCellText() {
+    switch (cellIndex) {
+      case 0:
+        return "W";
+        break;
+      case 1:
+        return "R";
+        break;
+      case 2:
+        return "O";
+        break;
+      case 3:
+        return "N";
+        break;
+      case 4:
+        return "G";
+        break;
+      default:
+        return "";
+        break;
     }
-    return cell.value.toUpperCase();
   }
 
   function getCellClass(score) {
@@ -109,5 +108,5 @@
 </style>
 
 <div bind:this={cellRef} class="animationContainer" > 
-   <div class={getCellClass(cell.score)}>{getCellText(false)}</div>
+   <div class={getCellClass(cell.score)}>{cell.value}</div>
 </div>
