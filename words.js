@@ -1,4 +1,7 @@
+ 
 import { wordIsValid } from "./stores";
+ 
+ 
 const words = {
   about: true,
   other: true,
@@ -2571,6 +2574,7 @@ const words = {
   darth: true,
   ching: true
 };
+
 
 export const todaysWord = getTodaysWord();
 export const todaysWordSplit = todaysWord

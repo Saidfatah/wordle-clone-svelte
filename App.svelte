@@ -1,17 +1,19 @@
 <script>
+
   import Button from "./Button.svelte";
   import { todaysWord, todaysWordSplit, validateWord } from "./words";
   import Cell from "./Cell.svelte";
   import { rows } from "./stores.js";
+ 
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
+
 
   let _rows;
 
   const unsubscribeRows = rows.subscribe(value => {
     console.log(value);
-
     _rows = value;
   });
 
@@ -50,6 +52,7 @@
       row[i].value = enteredWordCharacters[i];
     }
   }
+
 </script>
 
 <style>
@@ -67,6 +70,7 @@
   	const keyCode = event.keyCode;
   	const key = event.key;
     // const tempRows = [...rows]
+ 
     
     let validCHarCode = (keyCode > 64 && keyCode < 91)
     const isBackSpace = keyCode == 8
@@ -90,7 +94,6 @@
       .join("");
        
        const tempRows = [..._rows]
-
        if(validateWord(word)){
        checkRowResult(tempRows[activeRowIndex])
        $rows[activeRowIndex] = tempRows[activeRowIndex] 
