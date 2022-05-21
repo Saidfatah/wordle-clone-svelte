@@ -29,9 +29,9 @@
 <style>
   .notifications {
     position: fixed;
-    top: 10px;
-    left: 0;
-    right: 0;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
     margin: 0 auto;
     padding: 0;
     z-index: 9999;
