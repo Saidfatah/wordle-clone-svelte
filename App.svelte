@@ -1,8 +1,10 @@
 <script>
   import Button from "./Button.svelte";
+  import Toast from "./Toast.svelte";
+
   import { validateWord } from "./words";
   import Cell from "./Cell.svelte";
-  import { wordsStore } from "./stores.js";
+  import { wordsStore, notifications } from "./stores.js";
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
@@ -21,6 +23,13 @@
   }
   .row {
     display: flex;
+  }
+  .center {
+    width: 100%;
+    width: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
  
@@ -61,14 +70,16 @@
        // next line 
        // by setting state variable activeCharIndex
        activeRowIndex =activeRowIndex + 1 
-       }
+       }else notifications.warning('this is not an English word', 5000)
 
     }
 
 }}/>
 
 <main>
-  {#each _rows as row,rowIndex}
+ <div class="center" >
+ <div>
+   {#each _rows as row,rowIndex}
   <div class="row"  >
   {#each Object.values(row) as cell,cellIndex}
      <svelte:component this={Cell} {...{cell,cellIndex,isCurrentRow:rowIndex == activeRowIndex}}/>
@@ -76,4 +87,9 @@
   </div>
    
 	{/each}
+ </div>
+ </div>
+
+
+  <Toast />
 </main>
