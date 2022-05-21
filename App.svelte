@@ -57,26 +57,10 @@
     }
     if(isBackSpace && !validCHarCode && activeCellIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       wordsStore.backToPreviousCell()
- 
+       wordsStore.backToPreviousCell() 
     }
-    if ( isEnter && activeRowIndex < 5 && activeCellIndex > 3 && _rows[activeRowIndex][4].value !== ""){
-       //check if word is correct 
-       // here we are sending tempRows[activeRowIndex] as a ref 
-       const word = Object.values(_rows[activeRowIndex])
-      .map(row => row.value)
-      .join("");
-       
-       const tempRows = [..._rows]
-       if(validateWord(word)){
-       wordsStore.checkRowResult(activeRowIndex,tempRows[activeRowIndex])
-       // reset cell to 0
-       wordsStore.resetCellIndex()
-       // next line 
-       wordsStore.incrementRowIndex()
-       }else notifications.warning('this is not an English word', 500)
-
-    }
+    if ( isEnter )  wordsStore.submitRowAsnwer()  
+    
 
 }}/>
 

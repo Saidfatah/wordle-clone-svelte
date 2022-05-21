@@ -1,6 +1,9 @@
 import { writable, derived, get } from "svelte/store";
-import { todaysWord, todaysWordSplit } from "./words";
+import { todaysWord, todaysWordSplit, validateWord } from "./words";
 
+// TODO
+// extract activeRowIndex and activeCellIndex
+// into their own store
 function generateRow() {
   return {
     0: {
@@ -25,11 +28,6 @@ function generateRow() {
     }
   };
 }
-
-// TODO
-// extract activeRowIndex and activeCellIndex
-// into their own store
-
 const createWordsStore = () => {
   const wordIsValid = writable(true);
   const activeRowIndex = writable(0);
@@ -84,6 +82,32 @@ const createWordsStore = () => {
   const decrementCellIndex = () =>
     activeCellIndex.update((v) => (v === 0 ? 0 : v - 1));
 
+  const submitRowAsnwer = () => {
+    const activeRowIndexValue = get(activeRowIndex);
+    const activeCellIndexValue = get(activeCellIndex);
+    const _rows = get(rows);
+    const activeRow = _rows[activeRowIndexValue];
+    if (
+      activeRowIndexValue < 5 &&
+      activeCellIndexValue > 3 &&
+      _rows[activeRowIndexValue][4].value !== ""
+    ) {
+      //check if word is correct
+      // here we are sending tempRows[activeRowIndex] as a ref
+      const word = Object.values(activeRow)
+        .map((row) => row.value)
+        .join("");
+
+      const tempRows = [...get(rows)];
+      if (validateWord(word)) {
+        checkRowResult(activeRowIndexValue, tempRows[activeRowIndexValue]);
+        // reset cell to 0
+        resetCellIndex();
+        // next line
+        incrementRowIndex();
+      } else notifications.warning("this is not an English word", 500);
+    }
+  };
   const checkRowResult = (rowIndex, targetRow) => {
     const enteredWordCharacters = Object.values(targetRow)
       .map((row) => row.value)
@@ -135,11 +159,10 @@ const createWordsStore = () => {
     resetCellIndex,
 
     updateActiveCellValue,
-    backToPreviousCell
+    backToPreviousCell,
+    submitRowAsnwer
   };
 };
-
-export const wordsStore = createWordsStore();
 
 function createNotificationStore(timeout) {
   const _notifications = writable([]);
@@ -176,9 +199,9 @@ function createNotificationStore(timeout) {
     success: (msg, timeout) => send(msg, "success", timeout)
   };
 }
-
 function id() {
   return "_" + Math.random().toString(36).substr(2, 9);
 }
 
 export const notifications = createNotificationStore();
+export const wordsStore = createWordsStore();
