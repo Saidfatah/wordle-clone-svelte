@@ -70,7 +70,7 @@
        // next line 
        // by setting state variable activeCharIndex
        activeRowIndex =activeRowIndex + 1 
-       }else notifications.warning('this is not an English word', 5000)
+       }else notifications.warning('this is not an English word', 2000)
 
     }
 
