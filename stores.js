@@ -61,8 +61,8 @@ const createWordsStore = () => {
     wordIsValid.set(isValid);
   };
 
-  const checkRowResult = (rowIndex) => {
-    const enteredWordCharacters = Object.values(rows[rowIndex])
+  const checkRowResult = (rowIndex, targetRow) => {
+    const enteredWordCharacters = Object.values(targetRow)
       .map((row) => row.value)
       .join("");
 

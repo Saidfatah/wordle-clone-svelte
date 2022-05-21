@@ -54,8 +54,7 @@
        
        const tempRows = [..._rows]
        if(validateWord(word)){
-       wordsStore.checkRowResult(tempRows[activeRowIndex])
-       wordsStore.updateRow(activeRowIndex,tempRows[activeRowIndex])
+       wordsStore.checkRowResult(activeRowIndex,tempRows[activeRowIndex])
 
        //reset cell index by setting state variable activeCharIndex
        activeCharIndex = 0 
