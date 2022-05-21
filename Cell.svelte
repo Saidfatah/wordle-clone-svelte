@@ -64,8 +64,7 @@
 
 								  justify-content: center;
 								  align-items: center;
-								  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-								    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+								  font-family: "Koulen", cursive;
 								}
 								.empty {
 								  border: 2px solid grey;

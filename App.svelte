@@ -54,12 +54,11 @@
     if(validCHarCode && !isBackSpace && activeCellIndex < 5 && activeRowIndex < 5 ){
        // next cell 
        wordsStore.updateActiveCellValue(key)
-       wordsStore.incrementCellIndex()
     }
     if(isBackSpace && !validCHarCode && activeCellIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       wordsStore.updateActiveCellValue("")
-       wordsStore.decrementCellIndex()
+       wordsStore.backToPreviousCell()
+ 
     }
     if ( isEnter && activeRowIndex < 5 && activeCellIndex > 3 && _rows[activeRowIndex][4].value !== ""){
        //check if word is correct 
@@ -72,7 +71,7 @@
        if(validateWord(word)){
        wordsStore.checkRowResult(activeRowIndex,tempRows[activeRowIndex])
        // reset cell to 0
-       wordsStore.incrementCellIndex()
+       wordsStore.resetCellIndex()
        // next line 
        wordsStore.incrementRowIndex()
        }else notifications.warning('this is not an English word', 500)

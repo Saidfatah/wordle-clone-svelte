@@ -26,6 +26,10 @@ function generateRow() {
   };
 }
 
+// TODO
+// extract activeRowIndex and activeCellIndex
+// into their own store
+
 const createWordsStore = () => {
   const wordIsValid = writable(true);
   const activeRowIndex = writable(0);
@@ -38,14 +42,6 @@ const createWordsStore = () => {
     generateRow(),
     generateRow()
   ]);
-
-  //const updateActiveRow = (rowValue) => {
-  //rows.update((state) => {
-  //  const tempRows = [...state];
-  //  tempRows[get(activeRowIndex)] = rowValue;
-  //  return tempRows;
-  //});
-  //};
 
   const updateActiveCellValue = (cellValue) => {
     rows.update((state) => {
@@ -62,6 +58,15 @@ const createWordsStore = () => {
       return tempRows;
     });
   };
+  const backToPreviousCell = () => {
+    rows.update((state) => {
+      const tempRows = [...state];
+      tempRows[get(activeRowIndex)][get(activeCellIndex)].value = "";
+      return tempRows;
+    });
+    decrementCellIndex();
+  };
+
   const updateWordIsValid = (isValid) => {
     wordIsValid.set(isValid);
   };
@@ -107,7 +112,7 @@ const createWordsStore = () => {
       } else {
         updateActiveCellScore(rowIndex, i, "WRONG");
       }
-      updateActiveCellValue(rowIndex, i, enteredWordCharacters[i]);
+      updateActiveCellValue(enteredWordCharacters[i]);
     }
   };
 
@@ -129,7 +134,8 @@ const createWordsStore = () => {
     incrementCellIndex,
     resetCellIndex,
 
-    updateActiveCellValue
+    updateActiveCellValue,
+    backToPreviousCell
   };
 };
 
