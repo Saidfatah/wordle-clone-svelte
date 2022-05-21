@@ -1,5 +1,16 @@
 import { writable } from "svelte/store";
 
+
+export let wordIsValid = writable(true);
+
+export let rows = writable([
+  generateRow(),
+  generateRow(),
+  generateRow(),
+  generateRow(),
+  generateRow()
+]);
+ 
 function generateRow() {
   return {
     0: {
@@ -24,11 +35,3 @@ function generateRow() {
     }
   };
 }
-
-export const rows = writable([
-  generateRow(),
-  generateRow(),
-  generateRow(),
-  generateRow(),
-  generateRow()
-]);
