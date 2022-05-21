@@ -1,5 +1,5 @@
 <script>
-  import { wordIsValid } from "./stores.js";
+  import { wordsStore } from "./stores.js";
   export let cell;
   export let cellIndex;
   export let isCurrentRow;
@@ -7,7 +7,7 @@
   let cellRef;
   let _wordIsValid;
 
-  const unsubscribeWordIsValid = wordIsValid.subscribe(value => {
+  const unsubscribeWordIsValid = wordsStore.subscribeToWordIsValid(value => {
     _wordIsValid = value;
   });
 
@@ -17,8 +17,7 @@
       setTimeout(() => {
         cellRef.classList.remove("wiggle");
         // reset row state
-
-        $wordIsValid = true;
+        wordsStore.updateWordIsValid(true);
       }, 1000);
     }
   }

@@ -1,53 +1,17 @@
 <script>
   import Button from "./Button.svelte";
-  import { todaysWord, todaysWordSplit, validateWord } from "./words";
+  import { validateWord } from "./words";
   import Cell from "./Cell.svelte";
-  import { rows } from "./stores.js";
+  import { wordsStore } from "./stores.js";
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
 
   let _rows;
 
-  const unsubscribeRows = rows.subscribe(value => {
+  const unsubscribeRows = wordsStore.subscribeToRows(value => {
     _rows = value;
   });
-
-  function checkRowResult(row) {
-    const enteredWordCharacters = Object.values(row)
-      .map(row => row.value)
-      .join("");
-
-    let correctEntries = [];
-    for (let i = 0; i < 5; i++) {
-      if (enteredWordCharacters[i] == todaysWordSplit[i]) {
-        row[i].score = "CORRECT";
-      } else if (todaysWord.indexOf(enteredWordCharacters[i]) > -1) {
-        const countAppearncesInAnswer =
-          todaysWord.split(enteredWordCharacters[i]).length - 1;
-        const countAppearncesInTry =
-          enteredWordCharacters.split(enteredWordCharacters[i]).length - 1;
-        // handle case for duplicate chars in answer
-
-        // handle case for duplicate chars in enteredWordCharacters
-        //incase of duplicate chars and original word
-        //has only one of these chars first char takes WRONG_INDEX
-        if (
-          countAppearncesInTry == 1 ||
-          enteredWordCharacters.indexOf(enteredWordCharacters[i]) == i
-        ) {
-          //handle multiple appearnces in case wehere user typed correct
-          // chars but typed same char in wrong index
-          //countAppearncesInTry > 1 && countAppearncesInAnswer > 1
-
-          row[i].score = "WRONG_INDEX";
-        } else row[i].score = "WRONG";
-      } else {
-        row[i].score = "WRONG";
-      }
-      row[i].value = enteredWordCharacters[i];
-    }
-  }
 </script>
 
 <style>
@@ -73,12 +37,12 @@
 
     if(validCHarCode && !isBackSpace && activeCharIndex < 5 && activeRowIndex < 5 ){
        // next cell 
-       $rows[activeRowIndex][activeCharIndex].value=key
+       wordsStore.updateCell(activeRowIndex,activeCharIndex,key)
        if(activeCharIndex < 4 )activeCharIndex =activeCharIndex + 1 
     }
     if(isBackSpace && !validCHarCode && activeCharIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       $rows[activeRowIndex][activeCharIndex].value=""
+       wordsStore.updateCell(activeRowIndex,activeCharIndex,"")
        activeCharIndex =activeCharIndex === 0 ? 0: activeCharIndex - 1 
     }
     if ( isEnter && activeRowIndex < 5 && activeCharIndex > 3 && _rows[activeRowIndex][4].value !== ""){
@@ -90,9 +54,9 @@
        
        const tempRows = [..._rows]
        if(validateWord(word)){
-       checkRowResult(tempRows[activeRowIndex])
-       $rows[activeRowIndex] = tempRows[activeRowIndex] 
-       
+       wordsStore.checkRowResult(tempRows[activeRowIndex])
+       wordsStore.updateRow(activeRowIndex,tempRows[activeRowIndex])
+
        //reset cell index by setting state variable activeCharIndex
        activeCharIndex = 0 
        // next line 

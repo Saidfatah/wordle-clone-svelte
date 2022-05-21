@@ -1,7 +1,5 @@
- 
-import { wordIsValid } from "./stores";
- 
- 
+import { wordsStore } from "./stores";
+
 const words = {
   about: true,
   other: true,
@@ -2575,7 +2573,6 @@ const words = {
   ching: true
 };
 
-
 export const todaysWord = getTodaysWord();
 export const todaysWordSplit = todaysWord
   .split("")
@@ -2591,6 +2588,6 @@ function getTodaysWord() {
 export const validateWord = (word) => {
   // check if the entered entry is an actual word
   const isValid = words.hasOwnProperty(word);
-  wordIsValid.set(isValid);
+  wordsStore.updateWordIsValid(isValid);
   return words.hasOwnProperty(word);
 };
