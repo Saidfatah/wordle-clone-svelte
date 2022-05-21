@@ -1,14 +1,11 @@
 <script>
-
   import Button from "./Button.svelte";
   import { todaysWord, todaysWordSplit, validateWord } from "./words";
   import Cell from "./Cell.svelte";
   import { rows } from "./stores.js";
- 
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
-
 
   let _rows;
 
@@ -52,7 +49,6 @@
       row[i].value = enteredWordCharacters[i];
     }
   }
-
 </script>
 
 <style>
@@ -110,10 +106,10 @@
 }}/>
 
 <main>
-  {#each _rows as row}
+  {#each _rows as row,i}
   <div class="row"  >
   {#each Object.values(row) as cell}
-     <svelte:component this={Cell} {...{cell,isCurrentRow:row == rows[activeRowIndex]}}/>
+     <svelte:component this={Cell} {...{cell,isCurrentRow:i == activeRowIndex}}/>
 	{/each}
   </div>
    
