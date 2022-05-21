@@ -1,43 +1,20 @@
 <script>
   import Button from "./Button.svelte";
-  import words from "./words";
+  import { todaysWord, todaysWordSplit, validateWord } from "./words";
+  import Cell from "./Cell.svelte";
+  import { rows } from "./stores.js";
 
   let activeRowIndex = 0;
   let activeCharIndex = 0;
-  let rows = [
-    generateRow(),
-    generateRow(),
-    generateRow(),
-    generateRow(),
-    generateRow()
-  ];
-  const todaysWord = getTodaysWord();
-  const todaysWordSplit = todaysWord.split("").reduce((a, c, i) => [...a, c], []);
 
-  function generateRow() {
-    return {
-      0: {
-        score: "EMPTY",
-        value: ""
-      },
-      1: {
-        score: "EMPTY",
-        value: ""
-      },
-      2: {
-        score: "EMPTY",
-        value: ""
-      },
-      3: {
-        score: "EMPTY",
-        value: ""
-      },
-      4: {
-        score: "EMPTY",
-        value: ""
-      }
-    };
-  }
+  let _rows;
+
+  const unsubscribeRows = rows.subscribe(value => {
+    console.log(value);
+
+    _rows = value;
+  });
+
   function checkRowResult(row) {
     const enteredWordCharacters = Object.values(row)
       .map(row => row.value)
@@ -73,28 +50,6 @@
       row[i].value = enteredWordCharacters[i];
     }
   }
-  function validateWord(word, field, value) {
-    // check if the entered entry is an actual word
-    const isValid = words.hasOwnProperty(word);
-    console.log({ isValid });
-    return isValid;
-  }
-
-  function getTodaysWord() {
-    var wordValues = Object.keys(words);
-    //I'm using Left shift (<<) here because its cool
-    const randomWord = wordValues[(wordValues.length * Math.random()) << 0];
-    console.log({ randomWord });
-    return randomWord;
-  }
-
-  function getCellClass(score) {
-    if (score == "EMPTY") return "box empty";
-    if (score == "WRONG_INDEX") return "box wrong-index";
-    if (score == "WRONG") return "box wrong";
-    if (score == "CORRECT") return "box correct";
-    return "input";
-  }
 </script>
 
 <style>
@@ -105,33 +60,13 @@
   .row {
     display: flex;
   }
-  .box {
-    width: 50px;
-    height: 50px;
-    margin: 2px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .empty {
-    background: grey;
-  }
-  .wrong {
-    background: grey;
-  }
-  .wrong-index {
-    background: yellow;
-  }
-  .correct {
-    background: green;
-  }
 </style>
+ 
 
 <svelte:window on:keydown={(event)=>{
   	const keyCode = event.keyCode;
   	const key = event.key;
-    const tempRows = [...rows]
+    // const tempRows = [...rows]
     
     let validCHarCode = (keyCode > 64 && keyCode < 91)
     const isBackSpace = keyCode == 8
@@ -139,44 +74,43 @@
 
     if(validCHarCode && !isBackSpace && activeCharIndex < 5 && activeRowIndex < 5 ){
        // next cell 
-       tempRows[activeRowIndex][activeCharIndex].value=key
+       $rows[activeRowIndex][activeCharIndex].value=key
        if(activeCharIndex < 4 )activeCharIndex =activeCharIndex + 1 
-       
-
     }
     if(isBackSpace && !validCHarCode && activeCharIndex >= 0 && activeRowIndex < 5 ){
        // backspace
-       tempRows[activeRowIndex][activeCharIndex].value=""
+       $rows[activeRowIndex][activeCharIndex].value=""
        activeCharIndex =activeCharIndex === 0 ? 0: activeCharIndex - 1 
     }
-     if ( isEnter && activeRowIndex < 5 && activeCharIndex > 3 && tempRows[activeRowIndex][4].value !== ""){
+    if ( isEnter && activeRowIndex < 5 && activeCharIndex > 3 && _rows[activeRowIndex][4].value !== ""){
        //check if word is correct 
        // here we are sending tempRows[activeRowIndex] as a ref 
-          const words = Object.values(tempRows[activeRowIndex])
+       const word = Object.values(_rows[activeRowIndex])
       .map(row => row.value)
       .join("");
+       
+       const tempRows = [..._rows]
 
-       if(validateWord(words))
+       if(validateWord(word)){
        checkRowResult(tempRows[activeRowIndex])
-       console.log(tempRows.length)
+       $rows[activeRowIndex] = tempRows[activeRowIndex] 
+       
        //reset cell index by setting state variable activeCharIndex
        activeCharIndex = 0 
-
        // next line 
        // by setting state variable activeCharIndex
        activeRowIndex =activeRowIndex + 1 
+       }
+
     }
 
-    // set the rows state
-    rows = tempRows
- 
 }}/>
 
 <main>
-  {#each rows as row}
+  {#each _rows as row}
   <div class="row"  >
   {#each Object.values(row) as cell}
-	         <div class={getCellClass(cell.score)}>{cell.value}</div>
+     <svelte:component this={Cell} {...{cell,isCurrentRow:row == rows[activeRowIndex]}}/>
 	{/each}
   </div>
    
