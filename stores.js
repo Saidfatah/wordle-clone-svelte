@@ -83,6 +83,7 @@ const createWordsStore = () => {
     activeCellIndex.update((v) => (v === 0 ? 0 : v - 1));
 
   const submitRowAsnwer = () => {
+    console.log("submitRowAsnwer");
     const activeRowIndexValue = get(activeRowIndex);
     const activeCellIndexValue = get(activeCellIndex);
     const _rows = get(rows);
@@ -99,6 +100,7 @@ const createWordsStore = () => {
         .join("");
 
       const tempRows = [...get(rows)];
+      console.log(validateWord(word));
       if (validateWord(word)) {
         checkRowResult(activeRowIndexValue, tempRows[activeRowIndexValue]);
         // reset cell to 0

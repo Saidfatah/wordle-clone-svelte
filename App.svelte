@@ -2,6 +2,7 @@
   import Button from "./Button.svelte";
   import Toast from "./Toast.svelte";
   import Keyboard from "./Keyboard.svelte";
+  import colors from "./colors.js";
 
   import { validateWord } from "./words";
   import Cell from "./Cell.svelte";
@@ -23,12 +24,20 @@
   wordsStore.subscribeToRows(value => {
     _rows = value;
   });
+
+  const getMainStyles = () => `background:${colors.app_background_color};`;
 </script>
 
 <style>
   main {
     font-family: sans-serif;
     text-align: center;
+    padding: 1rem;
+    width: 100vw;
+  }
+  html {
+    margin: 0px;
+    padding: 0px;
   }
   .row {
     display: flex;
@@ -64,7 +73,7 @@
 
 }}/>
 
-<main>
+<main style={getMainStyles()} >
  <div class="center" >
  <div>
    {#each _rows as row,rowIndex}

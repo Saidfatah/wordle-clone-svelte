@@ -13,7 +13,8 @@ const light = {
   normal_cell_bg: white,
   correct_cell_bg: green,
   wrong_cell_bg: red,
-  wrong_index_cell_bg: yellow
+  wrong_index_cell_bg: yellow,
+  app_background_color: black
 };
 const dark = {
   button_bg: "#d3d6da",
@@ -24,7 +25,8 @@ const dark = {
   normal_cell_bg: black,
   correct_cell_bg: green,
   wrong_cell_bg: red,
-  wrong_index_cell_bg: yellow
+  wrong_index_cell_bg: yellow,
+  app_background_color: black
 };
 
 const theme = "DARK";

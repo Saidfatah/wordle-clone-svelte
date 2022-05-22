@@ -29,9 +29,12 @@
     if (cell.score == "WRONG") bgColor = colors.wrong_cell_bg;
     if (cell.score == "CORRECT") bgColor = colors.correct_cell_bg;
 
-    return "background:" + bgColor + ";";
+    return `background:${bgColor};`;
   }
-  const getCellContentStyles = () => "color:" + colors.text_color + ";";
+
+  const getCellContentStyles = () => `color:${colors.text_color};`;
+
+  console.log(getCellContentStyles());
 </script>
 
 
@@ -72,13 +75,10 @@
   .wiggle {
     animation-name: wiggle;
     animation-play-state: running;
-    animation-duration: 0.5s;
+    animation-duration: 1s;
   }
 </style>
 
-<div 
-styles=getCellWrapperStyles()
-bind:this={cellRef} 
-class="animationContainer" > 
-   <div  style=getCellContentStyles()  class="box">{cell.value}</div>
+<div bind:this={cellRef} class="animationContainer" > 
+   <div  style={getCellContentStyles()}  class="box">{cell.value}</div>
 </div>
