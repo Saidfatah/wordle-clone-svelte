@@ -42,11 +42,17 @@
          {String.fromCharCode(ASCIkey)}
         </button>
 {:else if ASCIkey === 8}
-	 <button style=getKeyBoardKeyStyles() on:click={e=>wordsStore.updateActiveCellValue(String.fromCharCode(ASCIkey))} class="none-char keyboard-key " > 
+	 <button 
+   style=getKeyBoardKeyStyles() 
+   on:click={e=>wordsStore.submitRowAsnwer() } 
+   class="none-char keyboard-key " > 
          Enter
         </button>
 {:else}
-		 <button style=getKeyBoardKeyStyles() on:click={e=>wordsStore.updateActiveCellValue(String.fromCharCode(ASCIkey))} class="none-char keyboard-key " > 
+		 <button 
+     style=getKeyBoardKeyStyles() 
+     on:click={e=>wordsStore.backToPreviousCell()} 
+     class="none-char keyboard-key " > 
         BackSPace
         </button>
 {/if}

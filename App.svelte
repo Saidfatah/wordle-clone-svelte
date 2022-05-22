@@ -34,6 +34,7 @@
     text-align: center;
     padding: 1rem;
     width: 100vw;
+    height: 100vh;
   }
   html {
     margin: 0px;

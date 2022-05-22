@@ -14,7 +14,7 @@ const light = {
   correct_cell_bg: green,
   wrong_cell_bg: red,
   wrong_index_cell_bg: yellow,
-  app_background_color: black
+  app_background_color: white
 };
 const dark = {
   button_bg: "#d3d6da",
@@ -29,5 +29,5 @@ const dark = {
   app_background_color: black
 };
 
-const theme = "DARK";
+const theme = "LIGHT";
 export default theme === "DARK" ? dark : light;
