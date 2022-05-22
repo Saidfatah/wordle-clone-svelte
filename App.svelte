@@ -36,10 +36,6 @@
     width: 100vw;
     height: 100vh;
   }
-  html {
-    margin: 0px;
-    padding: 0px;
-  }
   .row {
     display: flex;
   }
@@ -79,8 +75,8 @@
  <div>
    {#each _rows as row,rowIndex}
        <div class="row"  >
-          {#each Object.values(row) as cell,cellIndex}
-            <svelte:component this={Cell} {...{cell,cellIndex,isCurrentRow:rowIndex == activeRowIndex}}/>
+          {#each Object.values(row) as cell}
+            <svelte:component this={Cell} {...{cell,isCurrentRow:rowIndex == activeRowIndex}}/>
         	{/each}
        </div>
 	{/each}

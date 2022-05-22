@@ -6,6 +6,7 @@
 
   let cellRef;
   let _wordIsValid;
+  let cellStyles = getCellWrapperStyles(cell.score);
 
   const unsubscribeWordIsValid = wordsStore.subscribeToWordIsValid(value => {
     _wordIsValid = value;
@@ -14,6 +15,7 @@
   $: if (!_wordIsValid) {
     if (cellRef && isCurrentRow) {
       cellRef.classList.add("wiggle");
+      console.log(cellRef);
       setTimeout(() => {
         cellRef.classList.remove("wiggle");
         // reset row state
@@ -22,29 +24,30 @@
     }
   }
 
-  function getCellWrapperStyles() {
+  $: if (cell.score) {
+    console.log("score changed", cell.score);
+  }
+
+  function getCellWrapperStyles(score) {
     let bgColor;
-    if (cell.score == "EMPTY") bgColor = colors.normal_cell_bg;
-    if (cell.score == "WRONG_INDEX") bgColor = colors.wrong_cell_bg;
-    if (cell.score == "WRONG") bgColor = colors.wrong_cell_bg;
-    if (cell.score == "CORRECT") bgColor = colors.correct_cell_bg;
+    if (isCurrentRow) console.log(score);
+    if (score == "EMPTY") bgColor = colors.normal_cell_bg;
+    if (score == "WRONG_INDEX") bgColor = colors.wrong_index_cell_bg;
+    if (score == "WRONG") bgColor = colors.wrong_cell_bg;
+    if (score == "CORRECT") bgColor = colors.correct_cell_bg;
 
     return `background:${bgColor};`;
   }
-
-  const getCellContentStyles = () => `color:${colors.text_color};`;
-
-  console.log(getCellContentStyles());
 </script>
 
-
+<!-- I used global here because svelte removes unused classes 
+https://stackoverflow.com/questions/62698421/svelte-adding-a-class-to-a-div-doesnt-add-the-classes-css-to-div -->
 <style>
   .box {
     width: 50px;
     height: 50px;
     margin: 2px;
     display: flex;
-
     justify-content: center;
     align-items: center;
     font-family: "Koulen", cursive;
@@ -54,7 +57,7 @@
   .animationContainer {
     display: inline-block;
   }
-  @keyframes wiggle {
+  @keyframes wiggleAnimation {
     0% {
       transform: rotate(0deg);
     }
@@ -72,13 +75,13 @@
     }
   }
 
-  .wiggle {
-    animation-name: wiggle;
+  :global(.wiggle) {
+    animation-name: wiggleAnimation;
     animation-play-state: running;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
   }
 </style>
 
-<div bind:this={cellRef} class="animationContainer" > 
-   <div  style={getCellContentStyles()}  class="box">{cell.value}</div>
+<div style={cellStyles}  bind:this={cellRef} class="animationContainer" > 
+   <div  style={`color:${colors.text_color};`}  class="box">{cell.value}</div>
 </div>
