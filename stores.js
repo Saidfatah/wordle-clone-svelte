@@ -1,5 +1,5 @@
 import { writable, derived, get } from "svelte/store";
-import { todaysWord, todaysWordSplit, validateWord } from "./words";
+import { todaysWord, todaysWordCharacters, validateWord } from "./words";
 
 // TODO
 // extract activeRowIndex and activeCellIndex
@@ -53,6 +53,7 @@ const createWordsStore = () => {
     rows.update((state) => {
       const tempRows = [...state];
       tempRows[get(activeRowIndex)][get(activeCellIndex)].score = cellScore;
+      console.log(tempRows[get(activeRowIndex)]);
       return tempRows;
     });
   };
@@ -83,7 +84,6 @@ const createWordsStore = () => {
     activeCellIndex.update((v) => (v === 0 ? 0 : v - 1));
 
   const submitRowAsnwer = () => {
-    console.log("submitRowAsnwer");
     const activeRowIndexValue = get(activeRowIndex);
     const activeCellIndexValue = get(activeCellIndex);
     const _rows = get(rows);
@@ -100,9 +100,8 @@ const createWordsStore = () => {
         .join("");
 
       const tempRows = [...get(rows)];
-      console.log(validateWord(word));
       if (validateWord(word)) {
-        checkRowResult(activeRowIndexValue, tempRows[activeRowIndexValue]);
+        checkRowResult(tempRows[activeRowIndexValue]);
         // reset cell to 0
         resetCellIndex();
         // next line
@@ -110,16 +109,16 @@ const createWordsStore = () => {
       } else notifications.warning("this is not an English word", 500);
     }
   };
-  const checkRowResult = (rowIndex, targetRow) => {
+  const checkRowResult = (targetRow) => {
     const enteredWordCharacters = Object.values(targetRow)
       .map((row) => row.value)
       .join("");
 
     for (let i = 0; i < 5; i++) {
-      if (enteredWordCharacters[i] === todaysWordSplit[i]) {
-        updateActiveCellScore(rowIndex, i, "CORRECT");
+      if (enteredWordCharacters[i] === todaysWordCharacters[i]) {
+        updateActiveCellScore("CORRECT");
       } else if (todaysWord.indexOf(enteredWordCharacters[i]) > -1) {
-        const countAppearncesInTry =
+        const characterAppearncesInTryCount =
           enteredWordCharacters.split(enteredWordCharacters[i]).length - 1;
         // handle case for duplicate chars in answer
 
@@ -127,16 +126,19 @@ const createWordsStore = () => {
         //incase of duplicate chars and original word
         //has only one of these chars first char takes WRONG_INDEX
         if (
-          countAppearncesInTry === 1 ||
+          characterAppearncesInTryCount === 1 ||
           enteredWordCharacters.indexOf(enteredWordCharacters[i]) === i
         ) {
           //handle multiple appearnces in case wehere user typed correct
           // chars but typed same char in wrong index
 
-          updateActiveCellScore(rowIndex, i, "WRONG_INDEX");
-        } else updateActiveCellScore(rowIndex, i, "WRONG");
+          updateActiveCellScore("WRONG_INDEX");
+        } else updateActiveCellScore("WRONG");
       } else {
-        updateActiveCellScore(rowIndex, i, "WRONG");
+        // add to no in word characters
+        console.log("checkRowResult");
+        console.log(enteredWordCharacters[i], todaysWordCharacters[i]);
+        updateActiveCellScore("WRONG");
       }
       updateActiveCellValue(enteredWordCharacters[i]);
     }
@@ -151,7 +153,6 @@ const createWordsStore = () => {
     subscribeToRows,
     subscribeToWordIsValid,
     updateWordIsValid,
-    checkRowResult,
 
     subscribeToActiveRowIndex,
     incrementRowIndex,
@@ -166,7 +167,29 @@ const createWordsStore = () => {
   };
 };
 
-function createNotificationStore(timeout) {
+//
+export const themeValues = {
+  dark: "DARK",
+  light: "LIGHT"
+};
+const createThemeStore = () => {
+  const theme = writable(themeValues.light);
+
+  const subscribeToTheme = theme.subscribe;
+
+  const toggleTheme = () =>
+    theme.update((themeState) =>
+      themeState === themeValues.light ? themeValues.dark : themeValues.light
+    );
+  return {
+    theme,
+    subscribeToTheme,
+    toggleTheme
+  };
+};
+
+// notifications store
+function createNotificationStore() {
   const _notifications = writable([]);
 
   function send(message, type = "default", timeout) {
@@ -207,3 +230,4 @@ function id() {
 
 export const notifications = createNotificationStore();
 export const wordsStore = createWordsStore();
+export const themeStore = createThemeStore();

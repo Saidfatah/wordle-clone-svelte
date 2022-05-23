@@ -15,7 +15,6 @@
   $: if (!_wordIsValid) {
     if (cellRef && isCurrentRow) {
       cellRef.classList.add("wiggle");
-      console.log(cellRef);
       setTimeout(() => {
         cellRef.classList.remove("wiggle");
         // reset row state
@@ -25,18 +24,18 @@
   }
 
   $: if (cell.score) {
-    console.log("score changed", cell.score);
+    cellStyles = getCellWrapperStyles(cell.score);
   }
 
   function getCellWrapperStyles(score) {
     let bgColor;
-    if (isCurrentRow) console.log(score);
+    if (score == "CORRECT") console.log({ score });
     if (score == "EMPTY") bgColor = colors.normal_cell_bg;
     if (score == "WRONG_INDEX") bgColor = colors.wrong_index_cell_bg;
     if (score == "WRONG") bgColor = colors.wrong_cell_bg;
     if (score == "CORRECT") bgColor = colors.correct_cell_bg;
-
-    return `background:${bgColor};`;
+    console.log(bgColor);
+    return `background:${bgColor};border:none`;
   }
 </script>
 

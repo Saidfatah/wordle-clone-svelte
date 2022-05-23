@@ -17,7 +17,6 @@
     activeRowIndex = value;
   });
   wordsStore.subscribeToActiveCellIndex(value => {
-    console.log(value);
     activeCellIndex = value;
   });
 
@@ -59,6 +58,8 @@
 
     if(validCHarCode && !isBackSpace && activeCellIndex < 5 && activeRowIndex < 5 ){
        // next cell 
+       // increm
+       // 
        wordsStore.updateActiveCellValue(key)
     }
     if(isBackSpace && !validCHarCode && activeCellIndex >= 0 && activeRowIndex < 5 ){
@@ -71,6 +72,7 @@
 }}/>
 
 <main style={getMainStyles()} >
+ 
  <div class="center" >
  <div>
    {#each _rows as row,rowIndex}

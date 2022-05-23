@@ -2574,7 +2574,7 @@ const words = {
 };
 
 export const todaysWord = getTodaysWord();
-export const todaysWordSplit = todaysWord
+export const todaysWordCharacters = todaysWord
   .split("")
   .reduce((a, c, i) => [...a, c], []);
 

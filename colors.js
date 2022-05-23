@@ -1,3 +1,5 @@
+import { themeStore, themeValues } from "./stores";
+
 const black = "#121214";
 const white = "#fff";
 const green = "green";
@@ -29,5 +31,10 @@ const dark = {
   app_background_color: black
 };
 
-const theme = "LIGHT";
-export default theme === "DARK" ? dark : light;
+let theme = themeValues.light;
+
+themeStore.subscribeToTheme((value) => {
+  console.log({ value });
+  theme = value;
+});
+export default theme === themeValues.dark ? dark : light;
