@@ -1,8 +1,9 @@
 <script>
   import Button from "./Button.svelte";
+  import Toggle from "./Toggle.svelte";
   import Toast from "./Toast.svelte";
   import Keyboard from "./Keyboard.svelte";
-  import colors from "./colors.js";
+  import { colorsThemeSTore, defaultColorTheme } from "./colorsStore.js";
 
   import { validateWord } from "./words";
   import Cell from "./Cell.svelte";
@@ -24,7 +25,11 @@
     _rows = value;
   });
 
-  const getMainStyles = () => `background:${colors.app_background_color};`;
+  let colors = defaultColorTheme;
+  colorsThemeSTore.subscribeToThemeColors(value => {
+    colors = value;
+  });
+  $: mainStyles = `background:${colors && colors.app_background_color};`;
 </script>
 
 <style>
@@ -71,8 +76,8 @@
 
 }}/>
 
-<main style={getMainStyles()} >
- 
+<main style={mainStyles} >
+ <Toggle />
  <div class="center" >
  <div>
    {#each _rows as row,rowIndex}

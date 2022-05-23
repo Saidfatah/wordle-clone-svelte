@@ -167,27 +167,6 @@ const createWordsStore = () => {
   };
 };
 
-//
-export const themeValues = {
-  dark: "DARK",
-  light: "LIGHT"
-};
-const createThemeStore = () => {
-  const theme = writable(themeValues.light);
-
-  const subscribeToTheme = theme.subscribe;
-
-  const toggleTheme = () =>
-    theme.update((themeState) =>
-      themeState === themeValues.light ? themeValues.dark : themeValues.light
-    );
-  return {
-    theme,
-    subscribeToTheme,
-    toggleTheme
-  };
-};
-
 // notifications store
 function createNotificationStore() {
   const _notifications = writable([]);
@@ -230,4 +209,3 @@ function id() {
 
 export const notifications = createNotificationStore();
 export const wordsStore = createWordsStore();
-export const themeStore = createThemeStore();

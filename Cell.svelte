@@ -1,6 +1,7 @@
 <script>
+  import { get } from "svelte/store";
   import { wordsStore } from "./stores.js";
-  import colors from "./colors.js";
+  import { colorsThemeSTore, defaultColorTheme } from "./colorsStore.js";
   export let cell;
   export let isCurrentRow;
 
@@ -24,16 +25,23 @@
   }
 
   $: if (cell.score) {
-    cellStyles = getCellWrapperStyles(cell.score);
+    console.log(cell.score);
+    cellStyles = getCellWrapperStyles(cell.score, get(colorsThemeSTore));
   }
 
-  function getCellWrapperStyles(score) {
+  let colors = defaultColorTheme;
+  colorsThemeSTore.subscribeToThemeColors(value => {
+    console.log(value.app_background_color);
+    cellStyles = getCellWrapperStyles(cell.score, value);
+    colors = value;
+  });
+
+  function getCellWrapperStyles(score, colorsTheme = defaultColorTheme) {
     let bgColor;
-    if (score == "CORRECT") console.log({ score });
-    if (score == "EMPTY") bgColor = colors.normal_cell_bg;
-    if (score == "WRONG_INDEX") bgColor = colors.wrong_index_cell_bg;
-    if (score == "WRONG") bgColor = colors.wrong_cell_bg;
-    if (score == "CORRECT") bgColor = colors.correct_cell_bg;
+    if (score == "EMPTY") bgColor = colorsTheme.normal_cell_bg;
+    if (score == "WRONG_INDEX") bgColor = colorsTheme.wrong_index_cell_bg;
+    if (score == "WRONG") bgColor = colorsTheme.wrong_cell_bg;
+    if (score == "CORRECT") bgColor = colorsTheme.correct_cell_bg;
     console.log(bgColor);
     return `background:${bgColor};border:none`;
   }

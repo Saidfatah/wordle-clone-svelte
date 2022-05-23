@@ -1,6 +1,10 @@
 <script>
+  import { colorsThemeSTore } from "./colorsStore.js";
   export let checked = false;
-  export let color = "#2196F3";
+
+  $: {
+    colorsThemeSTore.toggleTheme(checked);
+  }
 </script>
 
 <style>
@@ -58,6 +62,7 @@
   }
 </style>
 
+<span> DarkMODE </span>
 <label class="switch" >
   <input type="checkbox" bind:checked />
   <span class="slider" />
