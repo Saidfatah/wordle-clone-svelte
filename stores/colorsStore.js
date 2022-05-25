@@ -60,4 +60,4 @@ const createThemeStore = () => {
   };
 };
 
-export const colorsThemeSTore = createThemeStore();
+export default createThemeStore();

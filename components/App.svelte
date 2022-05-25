@@ -2,11 +2,16 @@
   import Toggle from "./Toggle.svelte";
   import Toast from "./Toast.svelte";
   import Keyboard from "./Keyboard.svelte";
-  import { colorsThemeSTore, defaultColorTheme } from "./colorsStore.js";
 
-  import { validateWord } from "./words";
+  import { validateWord } from "../stores/words.js";
+  import {
+    wordsStore,
+    notificationsStore,
+    defaultTheme,
+    themeStore
+  } from "../stores";
+
   import Cell from "./Cell.svelte";
-  import { wordsStore, notifications } from "./stores.js";
 
   let activeRowIndex = 0;
   let activeCellIndex = 0;
@@ -24,8 +29,8 @@
     _rows = value;
   });
 
-  let colors = defaultColorTheme;
-  colorsThemeSTore.subscribeToThemeColors(value => {
+  let colors = defaultTheme;
+  themeStore.subscribeToThemeColors(value => {
     colors = value;
   });
   $: mainStyles = `background:${colors && colors.app_background_color};`;

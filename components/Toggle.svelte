@@ -1,9 +1,9 @@
 <script>
-  import { colorsThemeSTore } from "./colorsStore.js";
+  import { themeStore } from "../stores";
   export let checked = false;
 
   $: {
-    colorsThemeSTore.toggleTheme(checked);
+    themeStore.toggleTheme(checked);
   }
 </script>
 

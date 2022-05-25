@@ -1,14 +1,13 @@
 <script>
   import { get } from "svelte/store";
-  import { wordsStore } from "./stores.js";
-  import { colorsThemeSTore, defaultColorTheme } from "./colorsStore.js";
+  import { wordsStore, themeStore, defaultTheme } from "../stores";
   export let cell;
   export let isCurrentRow;
 
   let cellRef;
   let _wordIsValid;
-  let colors = defaultColorTheme;
-  let cellStyles = getCellWrapperStyles(cell.score, defaultColorTheme);
+  let colors = defaultTheme;
+  let cellStyles = getCellWrapperStyles(cell.score, defaultTheme);
 
   const unsubscribeWordIsValid = wordsStore.subscribeToWordIsValid(value => {
     _wordIsValid = value;
@@ -30,14 +29,14 @@
     cellStyles = getCellWrapperStyles(cell.score, colors);
   }
 
-  colorsThemeSTore.subscribeToThemeColors(value => {
+  themeStore.subscribeToThemeColors(value => {
     console.log(value.app_background_color);
     cellStyles = getCellWrapperStyles(cell.score, value);
     colors = value;
   });
 
   function getCellWrapperStyles(score, colorsTheme) {
-    if (!colorsTheme) colorsTheme = defaultColorTheme;
+    if (!colorsTheme) colorsTheme = defaultTheme;
     let bgColor;
     if (score == "EMPTY") bgColor = colorsTheme.normal_cell_bg;
     if (score == "WRONG_INDEX") bgColor = colorsTheme.wrong_index_cell_bg;

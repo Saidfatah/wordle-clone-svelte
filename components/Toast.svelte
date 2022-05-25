@@ -1,7 +1,7 @@
 <script>
   import { flip } from "svelte/animate";
   import { fly } from "svelte/transition";
-  import { notifications } from "./stores.js";
+  import { notificationsStore } from "../stores";
 
   export let themes = {
     danger: "#E26D69",
@@ -13,7 +13,7 @@
 </script>
 
 <div class="notifications">
-    {#each $notifications as notification (notification.id)}
+    {#each $notificationsStore as notification (notification.id)}
         <div
             animate:flip
             class="toast"

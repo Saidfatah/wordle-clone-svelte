@@ -1,13 +1,12 @@
 <script>
-  import { wordsStore } from "./stores";
-  import { colorsThemeSTore, defaultColorTheme } from "./colorsStore.js";
+  import { wordsStore, themeStore, defaultTheme } from "../stores";
 
   const ASCIkeys = Array.from(Array(26).keys()).map(n => n + 65);
   ASCIkeys.push(10); // enter key
   ASCIkeys.push(8); // backspace
 
-  let colors = defaultColorTheme;
-  colorsThemeSTore.subscribeToThemeColors(value => {
+  let colors = defaultTheme;
+  themeStore.subscribeToThemeColors(value => {
     colors = value;
   });
   $: getKeyBoardKeyStyles =

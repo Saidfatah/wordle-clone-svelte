@@ -1,4 +1,4 @@
-import { wordsStore } from "./stores";
+import { wordsStore } from "./index";
 
 const words = {
   about: true,
