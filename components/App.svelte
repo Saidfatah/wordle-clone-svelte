@@ -2,8 +2,6 @@
   import Toggle from "./Toggle.svelte";
   import Toast from "./Toast.svelte";
   import Keyboard from "./Keyboard.svelte";
-
-  import { validateWord } from "../stores/words.js";
   import {
     wordsStore,
     notificationsStore,

@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
-import { todaysWord, todaysWordCharacters, validateWord } from "./words";
-
+import { todaysWord, todaysWordCharacters, validateWord } from "./utils";
+import { notificationsStore as notifications } from "../index";
 // TODO
 // extract activeRowIndex and activeCellIndex
 // into their own store
