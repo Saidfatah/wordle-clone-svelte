@@ -41,21 +41,14 @@ const createWordsStore = () => {
     generateRow()
   ]);
 
-  const updateActiveCellValue = (cellValue) => {
+  const updateActiveCellField = (field, value) => {
+    // field could be "score" or "value"
     rows.update((state) => {
       const tempRows = [...state];
-      tempRows[get(activeRowIndex)][get(activeCellIndex)].value = cellValue;
+      tempRows[get(activeRowIndex)][get(activeCellIndex)][field] = value;
       return tempRows;
     });
     incrementCellIndex();
-  };
-  const updateActiveCellScore = (cellScore) => {
-    rows.update((state) => {
-      const tempRows = [...state];
-      tempRows[get(activeRowIndex)][get(activeCellIndex)].score = cellScore;
-      console.log(tempRows[get(activeRowIndex)]);
-      return tempRows;
-    });
   };
   const backToPreviousCell = () => {
     rows.update((state) => {
@@ -116,7 +109,7 @@ const createWordsStore = () => {
 
     for (let i = 0; i < 5; i++) {
       if (enteredWordCharacters[i] === todaysWordCharacters[i]) {
-        updateActiveCellScore("CORRECT");
+        updateActiveCellField("score", "CORRECT");
       } else if (todaysWord.indexOf(enteredWordCharacters[i]) > -1) {
         const characterAppearncesInTryCount =
           enteredWordCharacters.split(enteredWordCharacters[i]).length - 1;
@@ -132,15 +125,13 @@ const createWordsStore = () => {
           //handle multiple appearnces in case wehere user typed correct
           // chars but typed same char in wrong index
 
-          updateActiveCellScore("WRONG_INDEX");
-        } else updateActiveCellScore("WRONG");
+          updateActiveCellField("score", "WRONG_INDEX");
+        } else updateActiveCellField("score", "WRONG");
       } else {
-        // add to no in word characters
-        console.log("checkRowResult");
-        console.log(enteredWordCharacters[i], todaysWordCharacters[i]);
-        updateActiveCellScore("WRONG");
+        // add to no in word character
+        updateActiveCellField("score", "WRONG");
       }
-      updateActiveCellValue(enteredWordCharacters[i]);
+      updateActiveCellField("value", enteredWordCharacters[i]);
     }
   };
 
@@ -161,7 +152,7 @@ const createWordsStore = () => {
     incrementCellIndex,
     resetCellIndex,
 
-    updateActiveCellValue,
+    updateActiveCellField,
     backToPreviousCell,
     submitRowAsnwer
   };

@@ -7,7 +7,8 @@
 
   let cellRef;
   let _wordIsValid;
-  let cellStyles = getCellWrapperStyles(cell.score);
+  let colors = defaultColorTheme;
+  let cellStyles = getCellWrapperStyles(cell.score, defaultColorTheme);
 
   const unsubscribeWordIsValid = wordsStore.subscribeToWordIsValid(value => {
     _wordIsValid = value;
@@ -26,17 +27,17 @@
 
   $: if (cell.score) {
     console.log(cell.score);
-    cellStyles = getCellWrapperStyles(cell.score, get(colorsThemeSTore));
+    cellStyles = getCellWrapperStyles(cell.score, colors);
   }
 
-  let colors = defaultColorTheme;
   colorsThemeSTore.subscribeToThemeColors(value => {
     console.log(value.app_background_color);
     cellStyles = getCellWrapperStyles(cell.score, value);
     colors = value;
   });
 
-  function getCellWrapperStyles(score, colorsTheme = defaultColorTheme) {
+  function getCellWrapperStyles(score, colorsTheme) {
+    if (!colorsTheme) colorsTheme = defaultColorTheme;
     let bgColor;
     if (score == "EMPTY") bgColor = colorsTheme.normal_cell_bg;
     if (score == "WRONG_INDEX") bgColor = colorsTheme.wrong_index_cell_bg;

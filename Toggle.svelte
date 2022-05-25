@@ -60,10 +60,18 @@
     -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
+  .nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+  }
 </style>
 
-<span> DarkMODE </span>
+<div class="nav" >
+<span style="margin-right:0.5rem;" > Dark Mode </span>
 <label class="switch" >
   <input type="checkbox" bind:checked />
   <span class="slider" />
 </label>
+</div>

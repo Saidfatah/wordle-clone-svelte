@@ -1,5 +1,4 @@
 <script>
-  import Button from "./Button.svelte";
   import Toggle from "./Toggle.svelte";
   import Toast from "./Toast.svelte";
   import Keyboard from "./Keyboard.svelte";
@@ -65,7 +64,7 @@
        // next cell 
        // increm
        // 
-       wordsStore.updateActiveCellValue(key)
+       wordsStore.updateActiveCellField("value",key)
     }
     if(isBackSpace && !validCHarCode && activeCellIndex >= 0 && activeRowIndex < 5 ){
        // backspace

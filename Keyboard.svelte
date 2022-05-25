@@ -42,7 +42,7 @@
 <div class="keyboard">
     {#each ASCIkeys as ASCIkey }
         {#if ASCIkey > 10}
-	 <button style=getKeyBoardKeyStyles() on:click={e=>wordsStore.updateActiveCellValue(String.fromCharCode(ASCIkey))} class="keyboard-key" > 
+	 <button style=getKeyBoardKeyStyles() on:click={e=>wordsStore.updateActiveCellField("value",String.fromCharCode(ASCIkey))} class="keyboard-key" > 
          {String.fromCharCode(ASCIkey)}
         </button>
 {:else if ASCIkey === 8}
