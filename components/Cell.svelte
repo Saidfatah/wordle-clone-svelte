@@ -25,12 +25,10 @@
   }
 
   $: if (cell.score) {
-    console.log(cell.score);
     cellStyles = getCellWrapperStyles(cell.score, colors);
   }
 
   themeStore.subscribeToThemeColors(value => {
-    console.log(value.app_background_color);
     cellStyles = getCellWrapperStyles(cell.score, value);
     colors = value;
   });
@@ -42,7 +40,6 @@
     if (score == "WRONG_INDEX") bgColor = colorsTheme.wrong_index_cell_bg;
     if (score == "WRONG") bgColor = colorsTheme.wrong_cell_bg;
     if (score == "CORRECT") bgColor = colorsTheme.correct_cell_bg;
-    console.log(bgColor);
     return `background:${bgColor};border:none`;
   }
 </script>

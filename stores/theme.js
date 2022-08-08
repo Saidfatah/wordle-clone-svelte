@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 const black = "#121214";
-const white = "#fff";
+export const white = "#fff";
 const green = "green";
 const red = "red";
 const yellow = "rellow";

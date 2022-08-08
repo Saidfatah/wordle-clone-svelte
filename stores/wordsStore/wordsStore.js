@@ -41,11 +41,14 @@ const createWordsStore = () => {
     generateRow()
   ]);
 
-  const updateActiveCellField = (field, value) => {
+  const updateActiveCellField = (field, value, cellIndex) => {
     // field could be "score" or "value"
+    console.log({ cellIndex });
     rows.update((state) => {
       const tempRows = [...state];
-      tempRows[get(activeRowIndex)][get(activeCellIndex)][field] = value;
+      tempRows[get(activeRowIndex)][
+        typeof cellIndex !== "undefined" ? cellIndex : get(activeCellIndex)
+      ][field] = value;
       return tempRows;
     });
     incrementCellIndex();
@@ -109,7 +112,7 @@ const createWordsStore = () => {
 
     for (let i = 0; i < 5; i++) {
       if (enteredWordCharacters[i] === todaysWordCharacters[i]) {
-        updateActiveCellField("score", "CORRECT");
+        updateActiveCellField("score", "CORRECT", i);
       } else if (todaysWord.indexOf(enteredWordCharacters[i]) > -1) {
         const characterAppearncesInTryCount =
           enteredWordCharacters.split(enteredWordCharacters[i]).length - 1;
@@ -124,7 +127,7 @@ const createWordsStore = () => {
         ) {
           //handle multiple appearnces in case wehere user typed correct
           // chars but typed same char in wrong index
-
+          console.log("worng index ");
           updateActiveCellField("score", "WRONG_INDEX");
         } else updateActiveCellField("score", "WRONG");
       } else {

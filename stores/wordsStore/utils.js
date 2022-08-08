@@ -2,6 +2,7 @@ import wordsStore from "./wordsStore";
 import words from "./wordsList";
 
 export const todaysWord = getTodaysWord();
+console.log({ todaysWord });
 export const todaysWordCharacters = todaysWord
   .split("")
   .reduce((a, c, i) => [...a, c], []);
@@ -14,7 +15,7 @@ function getTodaysWord() {
 }
 export const validateWord = (word) => {
   // check if the entered entry is an actual word
-  const isValid = words.hasOwnProperty(word);
+  const isValid = words.hasOwnProperty(word.toLowerCase());
   wordsStore.updateWordIsValid(isValid);
-  return words.hasOwnProperty(word);
+  return isValid;
 };
