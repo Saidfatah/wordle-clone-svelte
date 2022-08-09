@@ -43,7 +43,18 @@
     height: 100vh;
   }
   .row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+  }
+  .rows {
+    width: 350px;
+    height: 420px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+    box-sizing: border-box;
   }
   .center {
     width: 100vw;
@@ -81,7 +92,7 @@
 <main style={mainStyles} >
  <Toggle />
  <div class="center" >
- <div>
+ <div class="rows" >
    {#each _rows as row,rowIndex}
        <div class="row"  >
           {#each Object.values(row) as cell}

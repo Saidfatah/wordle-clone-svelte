@@ -7,6 +7,7 @@
   let cellRef;
   let _wordIsValid;
   let colors = defaultTheme;
+  let border = "2px solid gray";
   let cellStyles = getCellWrapperStyles(cell.score, defaultTheme);
 
   const unsubscribeWordIsValid = wordsStore.subscribeToWordIsValid(value => {
@@ -37,9 +38,21 @@
     if (!colorsTheme) colorsTheme = defaultTheme;
     let bgColor;
     if (score == "EMPTY") bgColor = colorsTheme.normal_cell_bg;
-    if (score == "WRONG_INDEX") bgColor = colorsTheme.wrong_index_cell_bg;
-    if (score == "WRONG") bgColor = colorsTheme.wrong_cell_bg;
-    if (score == "CORRECT") bgColor = colorsTheme.correct_cell_bg;
+    else {
+      border = "none";
+    }
+    if (score == "WRONG_INDEX") {
+      bgColor = colorsTheme.wrong_index_cell_bg;
+      //border = "2px solid " + colorsTheme.wrong_index_cell_bg;
+    }
+    if (score == "WRONG") {
+      bgColor = colorsTheme.wrong_cell_bg;
+      //border = "2px solid " + colorsTheme.wrong_cell_bg;
+    }
+    if (score == "CORRECT") {
+      bgColor = colorsTheme.correct_cell_bg;
+      //border = "2px solid " + colorsTheme.correct_cell_bg;
+    }
     return `background:${bgColor};border:none`;
   }
 </script>
@@ -48,18 +61,25 @@
 https://stackoverflow.com/questions/62698421/svelte-adding-a-class-to-a-div-doesnt-add-the-classes-css-to-div -->
 <style>
   .box {
-    width: 50px;
-    height: 50px;
     margin: 2px;
-    display: flex;
     justify-content: center;
     align-items: center;
     font-family: "Koulen", cursive;
     border: 2px solid grey;
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: bold;
+    vertical-align: middle;
+    box-sizing: border-box;
+    text-transform: uppercase;
   }
 
-  .animationContainer {
-    display: inline-block;
+  .cell {
+    display: block;
+    animation-delay: 0ms;
   }
   @keyframes wiggleAnimation {
     0% {
@@ -86,6 +106,6 @@ https://stackoverflow.com/questions/62698421/svelte-adding-a-class-to-a-div-does
   }
 </style>
 
-<div style={cellStyles}  bind:this={cellRef} class="animationContainer" > 
-   <div  style={`color:${colors.text_color};`}  class="box">{cell.value}</div>
+<div style={cellStyles}  bind:this={cellRef} class="cell" > 
+   <div class="box"  style={`color:${colors.text_color};border:${border};`}  >{cell.value}</div>
 </div>

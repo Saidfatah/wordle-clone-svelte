@@ -43,7 +43,6 @@ const createWordsStore = () => {
 
   const updateActiveCellField = (field, value, cellIndex) => {
     // field could be "score" or "value"
-    console.log({ cellIndex });
     rows.update((state) => {
       const tempRows = [...state];
       tempRows[get(activeRowIndex)][
@@ -127,14 +126,13 @@ const createWordsStore = () => {
         ) {
           //handle multiple appearnces in case wehere user typed correct
           // chars but typed same char in wrong index
-          console.log("worng index ");
-          updateActiveCellField("score", "WRONG_INDEX");
-        } else updateActiveCellField("score", "WRONG");
+          updateActiveCellField("score", "WRONG_INDEX", i);
+        } else updateActiveCellField("score", "WRONG", i);
       } else {
         // add to no in word character
-        updateActiveCellField("score", "WRONG");
+        updateActiveCellField("score", "WRONG", i);
       }
-      updateActiveCellField("value", enteredWordCharacters[i]);
+      updateActiveCellField("value", enteredWordCharacters[i], i);
     }
   };
 

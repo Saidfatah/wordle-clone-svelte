@@ -2,9 +2,9 @@ import { writable } from "svelte/store";
 
 const black = "#121214";
 export const white = "#fff";
-const green = "green";
-const red = "red";
-const yellow = "rellow";
+const green = "#6aaa64";
+const yellow = "#c9b458";
+const gray = "#787c7e";
 
 const light = {
   button_bg: "#d3d6da",
@@ -14,7 +14,7 @@ const light = {
   icon_color: black,
   normal_cell_bg: white,
   correct_cell_bg: green,
-  wrong_cell_bg: red,
+  wrong_cell_bg: gray,
   wrong_index_cell_bg: yellow,
   app_background_color: white
 };
@@ -26,7 +26,7 @@ const dark = {
   icon_color: white,
   normal_cell_bg: black,
   correct_cell_bg: green,
-  wrong_cell_bg: red,
+  wrong_cell_bg: gray,
   wrong_index_cell_bg: yellow,
   app_background_color: black
 };
